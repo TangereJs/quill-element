@@ -1,13 +1,13 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<link rel="stylesheet" href="../quill/quill.bubble.css" />
-<link rel="stylesheet" href="../quill/quill.snow.css" />
-<link rel="stylesheet" href="../KaTeX/dist/katex.min.css" />
-<link rel="stylesheet" href="../highlightjs/styles/monokai-sublime.css" />
+<link rel="stylesheet" href="quill/quill.bubble.css" />
+<link rel="stylesheet" href="quill/quill.snow.css" />
+<link rel="stylesheet" href="KaTeX/katex.min.css" />
+<link rel="stylesheet" href="highlightjs/styles/monokai-sublime.css" />
 
-<script type="text/javascript" src="../KaTeX/dist/katex.min.js"></script>
-<script type="text/javascript" src="../highlightjs/highlight.pack.min.js"></script>
-<script type="text/javascript" src="../quill/quill.min.js"></script>
+<script type="text/javascript" src="KaTeX/katex.min.js"></script>
+<script type="text/javascript" src="highlightjs/highlight.pack.min.js"></script>
+<script type="text/javascript" src="quill/quill.min.js"></script>
 
 <!--
 # &lt;quill-element&gt;  <iframe src="https://ghbtns.com/github-btn.html?user=dadamonad&repo=quill-element&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
@@ -26,11 +26,11 @@ The `<quill-element>` exposes the complete API of its Quill instance. So you can
 ##### Call a method
 ```document.querySelector('quill-element').setText('Some content')```
 
-For a more in-depth documentation of the methods read the [Quill API](https://quilljs.com/docs/api/)! The following documentation is incomplete and does not cover overloaded methods. 
+For a more in-depth documentation of the methods read the [Quill API](https://quilljs.com/docs/api/)! The following documentation is incomplete and does not cover overloaded methods.
 
 ### Styling
 The following custom properties and mixins are available for styling:
- 
+
 Custom property | Description | Default
 ----------------|-------------|----------
 `--quill-toolbar` | Mixin applied to the quill toolbar | `{}`
@@ -95,7 +95,8 @@ Custom property | Description | Default
       init: function () {
         var children = this.children
         for (var i = children.length - 1; i >= 0; i--) {
-          children[i].remove()
+          var child = children[i];
+          Polymer.dom(child.parentElement).removeChild(child);
         }
         var editorContainer = document.createElement('div')
         editorContainer.setAttribute('id', 'editorContainer')
@@ -156,7 +157,7 @@ Custom property | Description | Default
           observer: 'sheduleReload'
         },
         /**
-         * Module configuration. `modules.toolbar` is overwritten by the toolbar property 
+         * Module configuration. `modules.toolbar` is overwritten by the toolbar property
          */
         modules: {
           type: Object,
@@ -213,8 +214,8 @@ Custom property | Description | Default
           value: false
         },
         /**
-         * Enables logging (globaly for all Quill instances) at a given level: `'error'`, `'warn'`, `'log'`, and `'info'`. If `debug = ""` it logs at 'warn' level. So you can create an element like this: 
-         * 
+         * Enables logging (globaly for all Quill instances) at a given level: `'error'`, `'warn'`, `'log'`, and `'info'`. If `debug = ""` it logs at 'warn' level. So you can create an element like this:
+         *
          * ```<quill-element debug></quill-element>```
          */
         debug: {
@@ -378,6 +379,12 @@ Custom property | Description | Default
       /**
        * Removes the focus from the editor
        */
+      focus: function () {
+        return this.quill.focus.apply(this.quill, arguments)
+      },
+      /**
+       * Removes the focus from the editor
+       */
       blur: function () {
         return this.quill.blur.apply(this.quill, arguments)
       },
@@ -435,17 +442,17 @@ Custom property | Description | Default
       }
       /**
        * Fires when quill is initialized. Event param: The Quill instance
-       * 
+       *
        * @event init
        */
       /**
        * Fires when the editor contents changed. Event param: The Quill delta
-       * 
+       *
        * @event text-change
        */
       /**
        * Fires when the selection changes. Event param: The Quill delta
-       * 
+       *
        * @event selection-change
        */
     });
